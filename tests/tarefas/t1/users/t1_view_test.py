@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from unittest.mock import patch, MagicMock
 
-# from users.models import User
+# from buster.models import User
 
 User: AbstractUser = get_user_model()
 
@@ -13,7 +13,7 @@ User: AbstractUser = get_user_model()
 class UserViewsTestT1(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.BASE_URL = "/api/users/"
+        cls.BASE_URL = "/api/buster/"
 
         # UnitTest Longer Logs
         cls.maxDiff = None
