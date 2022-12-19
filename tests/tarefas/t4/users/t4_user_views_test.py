@@ -15,7 +15,7 @@ User: AbstractUser = get_user_model()
 class UserViewsT4Test(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.BASE_URL = "/api/users/%s/"
+        cls.BASE_URL = "/api/buster/%s/"
         cls.employee, cls.employee_token = create_employee_with_token()
         cls.non_employee, cls.non_employee_token = create_non_employee_with_token()
 
