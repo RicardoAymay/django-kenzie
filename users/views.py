@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from rest_framework.views import APIView, Response, Request, status
 from .models import User
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from .permissions import IsEmployee, IsUser
+from django.shortcuts import get_object_or_404
 from .serializers import UserSerializer, LoginSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
@@ -42,3 +45,15 @@ class LoginView(APIView):
 
         return Response(token)
 
+class GetOneUserView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsUser]
+
+    def get(self, request: Request, user_id) -> Response:
+
+        user = get_object_or_404(User, id = user_id)
+        self.check_object_permissions(request, user)
+        # ipdb.set_trace()
+        serializer = UserSerializer(user)
+
+        return Response(serializer.data, status.HTTP_200_OK)

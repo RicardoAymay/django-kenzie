@@ -10,6 +10,7 @@ class UserSerializer(serializers.Serializer):
     birthdate = serializers.DateField(allow_null=True)
     is_employee = serializers.BooleanField(default=False)
     password = serializers.CharField(write_only=True)
+    id = serializers.IntegerField(read_only=True)
 
     def validate_email(self, email):
         if User.objects.filter(email = email).exists():
@@ -25,7 +26,11 @@ class UserSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         # ipdb.set_trace()
-        user =  User.objects.create_user(**validated_data)
+
+        if validated_data['is_employee'] == True:
+            user = User.objects.create_superuser(**validated_data)
+        elif validated_data['is_employee'] == False: 
+            user =  User.objects.create_user(**validated_data)
 
         return user
 
