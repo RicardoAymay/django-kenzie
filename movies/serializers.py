@@ -8,28 +8,33 @@ class MovieSerializer(serializers.Serializer):
     rating = serializers.CharField(max_length=20)
     synopsis = serializers.CharField(default=True, allow_null=True)
     added_by = serializers.SerializerMethodField()
+    id = serializers.IntegerField(read_only=True)
 
-    def get_owner_email(self, obj: User):
+    def get_added_by(self, obj: User):
         
-        return obj.email
+        return obj.title
 
     def create(self, validated_data):
         
         movie = Movie.objects.create(**validated_data)
-
+        
         return movie
 
 
 class MovieOrderSerializer(serializers.Serializer):
     title = serializers.SerializerMethodField()
     buyed_by = serializers.SerializerMethodField()
-    buyed_at = serializers.SerializerMethodField()
+    buyed_at = serializers.DateTimeField(read_only=True)
+    price = serializers.DecimalField(max_digits=8, decimal_places=2)
 
-    def get_movie_title(self, obj: MovieOrder) -> dict:
-        return {"title": obj.movie.title,
-                "buyed_by": obj.movie.user,
-                "buyed_at": obj.movie.buyed_at
-                }
-    
-    def create(self, validated_data: dict) -> MovieOrder:
-        return MovieOrder.objects.create(**validated_data)
+    def get_title(self, obj: MovieOrder):
+        return obj.movie.title
+
+    def get_buyed_by(self, obj: MovieOrder):
+        return obj.user.email
+
+    def create(self, validated_data):
+        movie = MovieOrder.objects.create(**validated_data)
+        return movie
+
+        

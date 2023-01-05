@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.urls import path
-from users.views import UserView, LoginView
+from users.views import UserView, LoginView, GetOneUserView
 from rest_framework_simplejwt import views
 from movies.views  import MovieView, GetOneMovieView, MovieOrderView
 
@@ -25,5 +25,7 @@ urlpatterns = [
     path("api/users/login/", LoginView.as_view()),
     path("api/movies/", MovieView.as_view()),
     path("api/movies/<int:movie_id>/", GetOneMovieView.as_view()),
-    path("api/movies/<int:movie_id>/orders/", MovieOrderView.as_view())
+    path("api/movies/<int:movie_id>/orders/", MovieOrderView.as_view()),
+    path("api/users/<int:user_id>/", GetOneUserView.as_view())
+    
 ]
