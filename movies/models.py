@@ -19,7 +19,7 @@ class Movie(models.Model):
         rating = models.CharField(max_length=20, choices=options_rating, default="G")
         title = models.CharField(max_length=127)
         duration = models.CharField(max_length=10, default=True, null=True)
-        synopsis = models.TextField(default=True, null=True)
+        synopsis = models.TextField(default=None, null=True)
 
         owner = models.ForeignKey(
         "users.User",

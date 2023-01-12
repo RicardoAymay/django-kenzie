@@ -26,7 +26,7 @@ class MovieViewsT2Test(APITestCase):
         response = self.client.get(self.BASE_URL)
 
         expected_count = movies_count
-        resulted_count = len(response.json())
+        resulted_count = len(response.json()['results'])
 
         msg = "Verifique se todos os filmes estão sendo retornados corretamente"
         self.assertEqual(expected_count, resulted_count, msg)

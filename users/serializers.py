@@ -7,10 +7,11 @@ class UserSerializer(serializers.Serializer):
     email = serializers.EmailField(max_length=127)
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
-    birthdate = serializers.DateField(allow_null=True)
+    birthdate = serializers.DateField(required=False)
     is_employee = serializers.BooleanField(default=False)
     password = serializers.CharField(write_only=True)
     id = serializers.IntegerField(read_only=True)
+    is_superuser = serializers.BooleanField(read_only=True)
 
     def validate_email(self, email):
         if User.objects.filter(email = email).exists():
