@@ -13,7 +13,7 @@ User: AbstractUser = get_user_model()
 class UserViewsTestT1(APITestCase):
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.BASE_URL = "/api/buster/"
+        cls.BASE_URL = "/api/users/"
 
         # UnitTest Longer Logs
         cls.maxDiff = None

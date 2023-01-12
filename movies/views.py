@@ -4,6 +4,7 @@ from rest_framework.views import APIView, Request, Response, status
 from .models import Movie
 from .serializers import MovieSerializer, MovieOrderSerializer
 from users.permissions import IsEmployee
+from rest_framework.permissions import IsAuthenticated
 from movies.permissions import IsMovieOwner
 import ipdb
 from django.shortcuts import get_object_or_404
@@ -40,7 +41,7 @@ class GetOneMovieView(APIView):
 
             if self.authentication_classes == False:
                 return Response(
-                {"detail": "Authentication credentials were not provided."}, status.HTTP_401_UNAUTHORIZED
+                {   "detail": "Authentication credentials were not provided."}, status.HTTP_401_UNAUTHORIZED
                 )
             return Response(serializer.data, status.HTTP_200_OK)
 
@@ -50,11 +51,11 @@ class GetOneMovieView(APIView):
 
             movie.delete()
 
-            return Response(204)
+            return Response(status=204)
 
 class MovieOrderView(APIView):
     authentication_classes = [JWTAuthentication]
-    permission_classes = [IsMovieOwner]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request: Request, movie_id) -> Response:
         # ipdb.set_trace()
