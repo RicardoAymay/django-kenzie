@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 
 
-# from buster.models import User
+# from users.models import User
 
 User: AbstractUser = get_user_model()
 
@@ -37,7 +37,7 @@ class UserLoginViewsT2Test(APITestCase):
             "password",
         }
         returned_fields = set(returned_data.keys())
-        msg = "Verfique se todas as chaves obrigatórias são retornadas ao tentar logar um usuário sem dados"
+        msg = "Verifique se todas as chaves obrigatórias são retornadas ao tentar logar um usuário sem dados"
         self.assertSetEqual(expected_fields, returned_fields, msg)
 
     def test_login_success(self):

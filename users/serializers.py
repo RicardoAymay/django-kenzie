@@ -1,43 +1,33 @@
 from rest_framework import serializers
 from .models import User
-import ipdb
+from django.core.exceptions import ValidationError
 
 class UserSerializer(serializers.Serializer):
-    username = serializers.CharField(max_length=20)
+    id = serializers.IntegerField(read_only=True)
     email = serializers.EmailField(max_length=127)
+    username = serializers.CharField(max_length=150)
+    birthdate = serializers.DateField(allow_null=True, default=None) #por que allow null e não null?
+    password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
-    birthdate = serializers.DateField(required=False)
     is_employee = serializers.BooleanField(default=False)
-    password = serializers.CharField(write_only=True)
-    id = serializers.IntegerField(read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
 
     def validate_email(self, email):
-        if User.objects.filter(email = email).exists():
-            raise serializers.ValidationError("email already registered.")
-
+        user = User.objects.filter(email=email).first()
+        if user:
+            raise ValidationError("email already registered.")
         return email
 
+    
     def validate_username(self, username):
-        if User.objects.filter(username = username).exists():
-            raise serializers.ValidationError("username already taken.")
-        
+        user = User.objects.filter(username=username).first()
+        if user:
+            raise ValidationError("username already taken.")
         return username
 
-    def create(self, validated_data):
-        # ipdb.set_trace()
+    def create(self, validated_data: dict) -> User:
+        if validated_data['is_employee']:
+            return User.objects.create_superuser(**validated_data)
 
-        if validated_data['is_employee'] == True:
-            user = User.objects.create_superuser(**validated_data)
-        elif validated_data['is_employee'] == False: 
-            user =  User.objects.create_user(**validated_data)
-
-        return user
-
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-    is_superuser = serializers.BooleanField(read_only=True)
-
-
+        return User.objects.create_user(**validated_data)

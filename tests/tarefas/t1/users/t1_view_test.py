@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, AbstractUser
 from unittest.mock import patch, MagicMock
 
-# from buster.models import User
+# from users.models import User
 
 User: AbstractUser = get_user_model()
 

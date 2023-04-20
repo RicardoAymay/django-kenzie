@@ -17,7 +17,7 @@ def create_movie_with_employee(
             "synopsis": "Jake Green is a hotshot gambler, long on audacity and short on...",
         }
 
-    movie = Movie.objects.create(**movie_data, owner=employee)
+    movie = Movie.objects.create(**movie_data, user=employee)
 
     return movie
 
@@ -31,7 +31,7 @@ def create_multiple_movies_with_employee(
             "duration": "110min",
             "rating": "R",
             "synopsis": "Jake Green is a hotshot gambler, long on audacity and short on...",
-            "owner": employee,
+            "user": employee,
         }
         for index in range(0, movies_count)
     ]
