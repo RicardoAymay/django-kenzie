@@ -6,7 +6,7 @@ class UserSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
     email = serializers.EmailField(max_length=127)
     username = serializers.CharField(max_length=150)
-    birthdate = serializers.DateField(allow_null=True, default=None) #por que allow null e não null?
+    birthdate = serializers.DateField(allow_null=True, default=None)
     password = serializers.CharField(write_only=True)
     first_name = serializers.CharField(max_length=50)
     last_name = serializers.CharField(max_length=50)
@@ -31,3 +31,8 @@ class UserSerializer(serializers.Serializer):
             return User.objects.create_superuser(**validated_data)
 
         return User.objects.create_user(**validated_data)
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(max_length=150, write_only = True)
+    password = serializers.CharField(write_only=True)
+    

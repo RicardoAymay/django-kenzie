@@ -1,17 +1,28 @@
 from rest_framework.views import APIView, Request, Response, status
 from users.models import User
-from users.serializers import UserSerializer
-class UserView(APIView):
+from users.serializers import UserSerializer, LoginSerializer
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 
-    def get(self, request: Request, Response) -> Response:
+class LoginView(APIView):
+    def post(self, request: Request):
+        serializer = TokenObtainPairSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        return Response(serializer.validated_data, status.HTTP_200_OK)
+
+
+class UserView(APIView):
+    def get(self, request: Request) -> Response:
         users = User.objects.all()
-        serializer = UserSerializer(users, many=True) 
+        serializer = UserSerializer(users, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
     def post(self, request: Request) -> Response:
-        serializer = UserSerializer(data=request.data) #passar os dados no serializer
-        serializer.is_valid(raise_exception=True) #chamar o validador
-       
-        serializer.save() #vai chamar o create
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        serializer.save()
 
         return Response(serializer.data, status.HTTP_201_CREATED)
