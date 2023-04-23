@@ -23,9 +23,9 @@ class MovieOrderViewsT3Test(APITestCase):
     def test_movie_order_creation_without_required_fields(self):
         _, token = create_non_employee_with_token()
         self.client.credentials(HTTP_AUTHORIZATION="Bearer " + str(token.access_token))
-
+        
         response = self.client.post(self.BASE_URL, data={}, format="json")
-
+        print(response)
         # STATUS CODE
         expected_status_code = status.HTTP_400_BAD_REQUEST
         resulted_status_code = response.status_code
