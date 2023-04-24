@@ -1,19 +1,25 @@
 from rest_framework.views import APIView, Request, Response, status
-from movies.models import Movie, MovieOrder
+from movies.models import Movie
 from movies.serializers import MovieSerializer, MovieOrderSerializer
 from rest_framework_simplejwt.authentication import JWTAuthentication
-from users.permissions import IsAdminOrReadOnly, IsMovieOwner
+from users.permissions import IsAdminOrReadOnly
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 2  
 
 class MovieListView(APIView):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAdminOrReadOnly]
     
     def get(self, request: Request) -> Response:
-        movies = Movie.objects.all()
-        serializer = MovieSerializer(movies, many=True)
-        return Response(serializer.data, status.HTTP_200_OK)
+        movies = Movie.objects.all().order_by('id')
+        paginator = CustomPageNumberPagination()
+        paginated_movies = paginator.paginate_queryset(movies, request)
+        serializer = MovieSerializer(paginated_movies, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request: Request) -> Response:
         serializer = MovieSerializer(data=request.data)
