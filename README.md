@@ -1,4 +1,4 @@
-# M5 - Kenzie Buster
+Kenzie Movies
 
 ## Instalação dos pacotes de teste
 
